@@ -1,4 +1,5 @@
 import React from 'react'
+import NavBar from '../../components/NavBar'
 
 export default function Homescreen() {
 
@@ -12,7 +13,10 @@ const users =[
 ]
 
   return (
+    <div className='bg-slate-200'>
+       <NavBar />
     <div className="text-3xl text-center bg-slate-200 h-screen flex justify-center items-center flex-wrap">
+       
     <ul className="flex justify-center text-lg bg-white p-4 rounded shadow-lg flex-wrap gap-4">
         {users.map((user, index) => (
           <li key={index} className="bg-gray-100 p-4 rounded shadow-md flex flex-col items-center justify-between w-64 ">
@@ -30,5 +34,7 @@ const users =[
       </ul>
       
   </div>
+    </div>
+ 
   )
 }

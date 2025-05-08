@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import "./NavBar.css"
-import "./MediaQuerries.css"
+import Homescreen from '../src/screens/Homescreen';
+import Login from '../src/screens/LogIn'
+
 
 export default function NavBar() {
 
 
     const links = [
-        { name: 'Home', onClick: () => window.location.href = "#home" },
-        {name: 'About', onClick: () => window.location.href = "#about"  },
+        { name: 'Home', onClick: () => <Homescreen /> },
+        {name: 'About', onClick: () => <Login />  },
         { name: 'Product', onClick: () => window.location.href = "#product"  },
         { name: 'Features', onClick: () => window.location.href = "#features" },
         { name: 'Gallery', onClick: () => window.location.href = "#gallery" },]
@@ -18,7 +20,7 @@ export default function NavBar() {
 
   return ( 
     <div className='flex justify-evenly'>
-    <h2 className='p-5 text-lg font-bold'>Arte</h2>
+    <h2 className='p-5 text-lg font-bold'>DevMeet</h2>
 
    <div className='nav-bar'>
      <ul className="navbar">

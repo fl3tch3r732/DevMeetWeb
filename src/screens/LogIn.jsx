@@ -6,9 +6,10 @@ import Footer from '../../components/Footer'
 export default function LogIn() {
   return (
 <div  className='flex flex-col'>
-  <div className='flex p-10 bg-gray-100 font-bold text-xl'>
-    <nav>
+  <div className='flex flex-row p-10 bg-gray-100 font-bold text-xl'>
+    <nav className='flex flex-1 flex-row justify-between items-center p-10'>
       <h2>DevMeet</h2>
+      <button className='flex justify-center items-center font-semibold bg-black text-white rounded-full border-gray-2 w-30 h-10 mt-3 cursor-pointer'>Sign Up</button>
     </nav>
   </div>
       
@@ -35,7 +36,7 @@ export default function LogIn() {
              <label htmlFor="remember-me" className='mt-2.5 mr-10 text-gray-500 text-sm'>Remember me</label>
            </div>
              <button type="submit" 
-               className='ml-10 p-2  bg-blue-400 rounded-sm top-2 w-20 text-white'>
+               className='ml-10 p-2  bg-blue-400 rounded-sm top-2 w-20 text-white cursor-pointer'>
                LOGIN
              </button>
         </div>

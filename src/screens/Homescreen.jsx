@@ -1,38 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NavBar from '../../components/NavBar'
 
 export default function Homescreen() {
 
-const users =[
-    {name:'Fletcher', city:'paris' ,skills:'javascript, node js, spring-boot',},
-    {name:'Thomson', city:'lyon', skills:'react, react native, django'},
-    {name:'Rayane', city:'seattle', skills:'java, postgres, flutter'},
-    {name:'Tamenou',city:'Douala',skills:'express js, node js'},
-    {name:'Fryde',city:'Yaounde',skills:'PHP, laravel, Mysql'},
-    {name:'Noah',city:'New delhi',skills:'Python, Django, Sqlite'}
-]
+  const [users, setUsers] = useState([])
+
+useEffect(() => {
+  fetch('http://localhost:3000/api/user')
+    .then(res => res.json())
+    .then(data => {
+      setUsers(data.data);
+      console.log('Fetched users:', data);
+      console.log('Type:', typeof data); 
+       // Do something with the user data
+    })
+    .catch(err => console.error('Error:', err));
+}, []);
+
 
   return (
     <div className='bg-slate-200'>
        <NavBar />
-    <div className="text-3xl text-center bg-slate-200 h-screen flex justify-center items-center flex-wrap">
-       
-    <ul className="flex justify-center text-lg bg-white p-4 rounded shadow-lg flex-wrap gap-4">
-        {users.map((user, index) => (
-          <li key={index} className="bg-gray-100 p-4 rounded shadow-md flex flex-col items-center justify-between w-64 ">
+   <h1 className="text-4xl font-bold text-center mb-10 text-gray-700">Connect with Developers</h1>
 
-             <div className="flex flex-col rounded shadow-md items-center">
-             <h2 className="text-xl font-bold">{user.name}</h2>
-             <p className="text-gray-600">{user.city}</p>
-             <p className="text-gray-500">{user.skills}</p>
-             </div>
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
+    {users.map((user, index) => (
+      <div
+        key={index}
+        className="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center transition-transform hover:scale-105"
+      >
+        {/* Avatar or Initials Placeholder */}
+        <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl mb-4">
+          {user.name?.charAt(0).toUpperCase()}
+        </div>
 
-             <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4 cursor-pointer">Connect</button>
-           
-          </li>
-        ))}
-      </ul>
-      
+        {/* User Details */}
+        <h2 className="text-xl font-semibold text-gray-800">{user.name}</h2>
+        <p className="text-sm text-gray-500">{user.city}</p>
+        <p className="text-sm text-gray-600 mt-1 text-center">{user.skills}</p>
+
+        {/* Connect Button */}
+        <button className="mt-6 px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow transition">
+          Connect
+        </button>
+      </div>
+    ))}
   </div>
     </div>
  

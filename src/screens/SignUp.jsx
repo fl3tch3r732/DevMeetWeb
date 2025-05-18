@@ -1,7 +1,7 @@
 import React from 'react'
 import Partnership from '../assets/Partnership.png'
-import Button from '../../components/Button'
-import Footer from '../../components/Footer'
+import Button from '../components/Button'
+import Footer from '../components/Footer'
 import LogIn from './LogIn'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,7 @@ export default function SignUp() {
     github: '',
     linkedIn: '',
     password: '',
+    confirmPassword: '',
   });
 
     const handleChange = (e) => {
@@ -27,13 +28,27 @@ export default function SignUp() {
 const handleSubmit = async (e) => {
   e.preventDefault();
 
+  // Validate password and confirmPassword match
+  if (form.password !== form.confirmPassword) {
+    alert('Passwords do not match');
+    return;
+  }
+
   try {
     const res = await fetch('http://localhost:3000/api/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(form),
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        location: form.location,
+        skills: form.skills,
+        github: form.github,
+        linkedIn: form.linkedIn,
+      }),
     });
 
     const data = await res.json();
@@ -45,7 +60,10 @@ const handleSubmit = async (e) => {
 
     console.log('User signed up:', data);
     alert('Signup successful!');
-    navigate(LogIn);
+    // Optionally, you can redirect the user to the login page or another page
+    // For example, using react-router-dom:
+    navigate('/login');
+  0;
   } catch (err) {
     console.error('Signup error:', err.message);
     alert(err.message);
@@ -70,7 +88,7 @@ const handleSubmit = async (e) => {
            </div>
        
              <div  className='flex justify-center items-center flex-col w-[50%] h-full '>
-               <form onSubmit={handleSubmit} action="log-in"  className='flex justify-center items-center flex-col mt-[10%] mr-[30%]'>
+               <form onSubmit={handleSubmit} className='flex justify-center items-center flex-col mt-[10%] mr-[30%]'>
                <h2 className='text-3xl font-semibold mb-10 text-gray-700'>Sign Up</h2>
                  <input type="text" name="name" id="user-info"
                  placeholder='Full name'
@@ -105,7 +123,7 @@ const handleSubmit = async (e) => {
                  className=' p-4 mb-5 bg-gray-100 rounded-lg top-4 w-96 border-2 border-gray-200 '
                  />
                   <input type="text" name="linkedIn" id="linkedin-link"
-                 placeholder='Your Linked'
+                 placeholder='Your LinkedIn'
                   onChange={handleChange}
                   value={form.linkedIn}
                  className=' p-4 mb-5 bg-gray-100 rounded-lg top-4 w-96 border-2 border-gray-200 '
@@ -117,6 +135,13 @@ const handleSubmit = async (e) => {
                   required
                  className=' p-4 mb-5 bg-gray-100 rounded-lg top-4 w-96 border-2 border-gray-200 '
                  />
+                  <input type="password" name="confirmPassword" id="confirm-password"
+                  placeholder='Confirm password'
+                  onChange={handleChange}
+                  value={form.confirmPassword}
+                  required
+                  className=' p-4 mb-5 bg-gray-100 rounded-lg top-4 w-96 border-2 border-gray-200 '
+                  />
                  
                  <button type="submit" 
                  className=' p-2  bg-blue-400 rounded-sm top-2 w-96 text-white text-lg cursor-pointer'

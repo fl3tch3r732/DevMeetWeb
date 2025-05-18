@@ -1,7 +1,7 @@
 import React from 'react'
 import Partnership from '../assets/Partnership.png'
-import Button from '../../components/Button'
-import Footer from '../../components/Footer'
+import Button from '../components/Button'
+import Footer from '../components/Footer'
 
 export default function LogIn() {
   return (

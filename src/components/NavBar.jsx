@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import "./NavBar.css"
-import Homescreen from '../src/screens/Homescreen';
-import Login from '../src/screens/LogIn'
+import Homescreen from '../screens/Homescreen';
+import Login from '../screens/LogIn'
 
 
 export default function NavBar() {

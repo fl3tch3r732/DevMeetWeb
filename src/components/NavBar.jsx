@@ -2,20 +2,31 @@ import React, { useState } from 'react'
 import "./NavBar.css"
 import Homescreen from '../screens/Homescreen';
 import Login from '../screens/LogIn'
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/useAuth';
 
 
 export default function NavBar() {
 
+  const navigate = useNavigate();
 
+    const {logout, token} = useAuth();
     const links = [
-        { name: 'Home', onClick: () => <Homescreen /> },
-        {name: 'About', onClick: () => <Login />  },
+        { name: 'Home', onClick: () => navigate('/Home') },
+        {name: 'About', onClick: () => navigate('') },
         { name: 'Product', onClick: () => window.location.href = "#product"  },
         { name: 'Features', onClick: () => window.location.href = "#features" },
         { name: 'Gallery', onClick: () => window.location.href = "#gallery" },]
    
     const [activeTab, setActiveTab]=useState(links[0].name);
     const tabs = [links[0].name, links[1].name, links[2].name, links[3].name, links[4].name]
+
+    const handleLogout = () => {
+    logout();             // clear token from context + localStorage
+    navigate('/login');   // redirect to login screen
+  };
+  
+   console.log('token:', token);
 
 
   return ( 
@@ -39,10 +50,10 @@ export default function NavBar() {
        ))}
      </ul>
      </div>
-
-        <button className='flex justify-center items-center  bg-black text-white rounded-full border-gray-2 w-30 h-10 mt-3 cursor-pointer'>Explore</button>
+      {token? ( <button className='flex justify-center items-center  bg-black text-white rounded-full border-gray-2 w-30 h-10 mt-3 cursor-pointer'
+        onClick={handleLogout}
+        >Logout</button>):(<></>)} 
 
   </div>
-  
   )
 }

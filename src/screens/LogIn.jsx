@@ -5,12 +5,14 @@ import Button from '../components/Button'
 import Footer from '../components/Footer'
 import { data, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/useAuth'
 
 export default function LogIn() {
 
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
 const navigate = useNavigate();
+const {login} = useAuth(); // Assuming you have a login function in your AuthContext  
 
  const handleLogin = async (e) => {
     e.preventDefault();
@@ -27,6 +29,9 @@ const navigate = useNavigate();
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
 
+      if (!token) throw new Error('No token received from server');
+      login(token); // Call login function from AuthContext
+      
       alert('Login successful!');
       navigate('/Home'); // redirect to protected route
 
@@ -45,7 +50,7 @@ return (
   <div className='flex flex-row p-5 pt-0 bg-gray-100 font-bold text-xl'>
     <nav className='flex flex-1 flex-row justify-between items-center p-10'>
       <h2>DevMeet</h2>
-      <button className='flex justify-center items-center font-semibold bg-black text-white rounded-full border-gray-2 w-30 h-10 mt-3 cursor-pointer' onClick={()=>navigate('/')}>Sign Up</button>
+      <button className='flex justify-center items-center font-semibold bg-black text-white rounded-full border-gray-2 w-30 h-10 mt-3 cursor-pointer' onClick={()=>navigate('/signup')}>Sign Up</button>
     </nav>
   </div>
       

@@ -1,10 +1,8 @@
-import React from 'react'
 import Partnership from '../assets/Partnership.png'
 import Button from '../components/Button'
 import Footer from '../components/Footer'
-import LogIn from './LogIn'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 
 export default function SignUp() {
 
@@ -62,7 +60,7 @@ const handleSubmit = async (e) => {
     alert('Signup successful!');
     // Optionally, you can redirect the user to the login page or another page
     
-    navigate('/');
+    navigate('/login');
   0;
   } catch (err) {
     console.error('Signup error:', err.message);
@@ -149,7 +147,6 @@ const handleSubmit = async (e) => {
                  
                  <div className='flex gap-20 mt-5'>
                    <h2 className='text-sm text-gray-500'>Already have an account?</h2>
-                   {/* <a href="../screens/LogIn" >Log in</a> */}
                    <button className='text-sm text-blue-500 cursor-pointer' onClick={()=>navigate('/login')}>Log in</button>
                  </div>
 

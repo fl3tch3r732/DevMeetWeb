@@ -61,8 +61,8 @@ const handleSubmit = async (e) => {
     console.log('User signed up:', data);
     alert('Signup successful!');
     // Optionally, you can redirect the user to the login page or another page
-    // For example, using react-router-dom:
-    navigate('/login');
+    
+    navigate('/');
   0;
   } catch (err) {
     console.error('Signup error:', err.message);
@@ -149,7 +149,8 @@ const handleSubmit = async (e) => {
                  
                  <div className='flex gap-20 mt-5'>
                    <h2 className='text-sm text-gray-500'>Already have an account?</h2>
-                   <a href="" className='text-sm text-blue-500'>Log in</a>
+                   {/* <a href="../screens/LogIn" >Log in</a> */}
+                   <button className='text-sm text-blue-500 cursor-pointer' onClick={()=>navigate('/login')}>Log in</button>
                  </div>
 
                 

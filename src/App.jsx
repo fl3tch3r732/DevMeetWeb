@@ -9,8 +9,9 @@ function App() {
     <div className="App">
     
     <Routes>
-      <Route path="/" element={<SignUp />} />
-      <Route path="/login" element={<LogIn />} /> {/* 👈 THIS */}
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/" element={<LogIn />} /> {/* 👈 THIS */}
+      <Route path="/Home" element={<Homescreen />} />
     </Routes>
     </div>
   );

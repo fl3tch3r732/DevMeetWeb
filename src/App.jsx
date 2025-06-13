@@ -4,6 +4,7 @@ import Homescreen from "./screens/Homescreen";
 import LogIn from "./screens/LogIn";
 import SignUp from './screens/SignUp';
 import { useAuth } from "./context/useAuth"; // <-- Import useAuth hook
+import ProfilePage from "./screens/ProfilePage";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <>
             <Route path="/Home" element={<Homescreen />} />
             <Route path="/" element={<LogIn />} />
+            <Route path="/profilepage" element={<ProfilePage />} />
           </>
         ) : (
           <>

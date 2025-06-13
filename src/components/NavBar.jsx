@@ -1,59 +1,131 @@
-import React, { useState } from 'react'
-import "./NavBar.css"
-import Homescreen from '../screens/Homescreen';
-import Login from '../screens/LogIn'
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 
-
 export default function NavBar() {
-
   const navigate = useNavigate();
+  const { logout, token, user } = useAuth();
 
-    const {logout, token} = useAuth();
-    const links = [
-        { name: 'Home', onClick: () => navigate('/Home') },
-        {name: 'About', onClick: () => navigate('') },
-        { name: 'Product', onClick: () => window.location.href = "#product"  },
-        { name: 'Features', onClick: () => window.location.href = "#features" },
-        { name: 'Gallery', onClick: () => window.location.href = "#gallery" },]
-   
-    const [activeTab, setActiveTab]=useState(links[0].name);
-    const tabs = [links[0].name, links[1].name, links[2].name, links[3].name, links[4].name]
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [avatarDropdownOpen, setAvatarDropdownOpen] = useState(false);
 
-    const handleLogout = () => {
-    logout();             // clear token from context + localStorage
-    navigate('/login');   // redirect to login screen
+  const links = [
+    { name: 'Home', onClick: () => navigate('/Home') },
+    { name: 'Discover Developers', onClick: () => navigate('/discover') },
+    { name: 'My Connections', onClick: () => navigate('/connections') },
+    { name: 'Messages', onClick: () => navigate('/messages') },
+    { name: 'Settings', onClick: () => navigate('/settings') },
+  ];
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
   };
-  
-   console.log('token:', token);
 
+  return (
+    <nav className="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <h2 className="text-2xl font-bold text-gray-800">DevMeet</h2>
 
-  return ( 
-    <div className='flex justify-evenly'>
-    <h2 className='p-5 text-lg font-bold'>DevMeet</h2>
+        {/* Desktop Links */}
+        <ul className="hidden md:flex gap-6 items-center">
+          {links.map((link) => (
+            <li
+              key={link.name}
+              onClick={link.onClick}
+              className="cursor-pointer text-gray-700 hover:text-blue-600 font-medium"
+            >
+              {link.name}
+            </li>
+          ))}
+        </ul>
 
-   <div className='nav-bar'>
-     <ul className="navbar">
-       {tabs.map((tab)=>(
-        <li
-        key={tab}
-        className={`tab ${activeTab===tab ? 'active' : ''}`}
-        onClick={()=> {setActiveTab(tab)
-          links.find((link) => link.name === tab).onClick && links.find((link) => link.name === tab).onClick()
-          
-        }}
-        
-        >
-            {tab.charAt(0).toUpperCase() + tab.slice(1)}
-        </li>
-       ))}
-     </ul>
-     </div>
-      {token? ( <button className='flex justify-center items-center  bg-black text-white rounded-full border-gray-2 w-30 h-10 mt-3 cursor-pointer'
-        onClick={handleLogout}
-        >Logout</button>):(<></>)} 
+        {/* Right side */}
+        <div className="flex items-center space-x-4">
+          {token ? (
+            <div className="relative">
+              <button
+                onClick={() => setAvatarDropdownOpen(!avatarDropdownOpen)}
+                className="w-10 h-10 rounded-full bg-blue-500 text-white font-semibold flex items-center justify-center focus:outline-none"
+              >
+                <div className='cursor-pointer text-lg font-bold hover:scale-[1.03] transition duration-300'>
+                  {user?.name?.charAt(0).toUpperCase() || 'U'}</div>
+                
 
-  </div>
-  )
+              </button>
+
+              {avatarDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-10">
+                  <button
+                    onClick={() => {
+                      setAvatarDropdownOpen(false);
+                      navigate('/profilepage');
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Profile
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => navigate('/login')}
+              className="hidden md:inline-block bg-black text-white px-4 py-2 rounded-full hover:bg-gray-900"
+            >
+              Login
+            </button>
+          )}
+
+          {/* Hamburger for mobile */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden text-gray-800 focus:outline-none"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {menuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Dropdown Menu */}
+      {menuOpen && (
+        <div className="md:hidden px-4 pb-4 space-y-2">
+          {links.map((link) => (
+            <div
+              key={link.name}
+              onClick={() => {
+                setMenuOpen(false);
+                link.onClick();
+              }}
+              className="cursor-pointer block text-gray-700 hover:text-blue-600"
+            >
+              {link.name}
+            </div>
+          ))}
+          {token && (
+            <div className="pt-2">
+              <button
+                onClick={handleLogout}
+                className="w-full text-left text-red-600 mt-2 hover:underline"
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </nav>
+  );
 }

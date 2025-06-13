@@ -25,16 +25,16 @@ const {login} = useAuth(); // Assuming you have a login function in your AuthCon
 
       const { token, user } = res.data;
 
-      // Store JWT in localStorage
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+      // // Store JWT in localStorage
+      // localStorage.setItem('token', token);
+      // localStorage.setItem('user', JSON.stringify(user));
 
       if (!token) throw new Error('No token received from server');
-      login(token); // Call login function from AuthContext
+      login({ token, user }); // Call login function from AuthContext
       
-      alert('Login successful!');
       navigate('/Home'); // redirect to protected route
-
+      
+      console.log('Login successful!');
       console.log('Server response:', data);
 
       

@@ -92,7 +92,7 @@ return (
         </div>
       </form>
             <div className='flex gap-20 mt-8 ml-[30%]'>
-              <button className='text-sm text-blue-500 cursor-pointer' onClick={()=>navigate('/signup')}>Register now</button>
+              <button className='text-sm text-blue-500 cursor-pointer hover:underline' onClick={()=>navigate('/signup')}>Register now</button>
               <button className='text-sm text-gray-500 cursor-pointer'>Forgot password?</button>
             </div>
       <h2 className='p-5 ml-50 text-lg font-semibold text-gray-500 italic'>- or -</h2>

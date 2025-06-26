@@ -48,8 +48,18 @@ export default function NavBar() {
                 onClick={() => setAvatarDropdownOpen(!avatarDropdownOpen)}
                 className="w-10 h-10 rounded-full bg-blue-500 text-white font-semibold flex items-center justify-center focus:outline-none"
               >
-                <div className='cursor-pointer text-lg font-bold hover:scale-[1.03] transition duration-300'>
-                  {user?.name?.charAt(0).toUpperCase() || 'U'}</div>
+                <div className='cursor-pointer mt-4 w-20 h-10 rounded-full overflow-hidden bg-gray-200 mb-4 flex items-center justify-center hover:scale-[1.03]'>
+                  {user.profile_image ? (
+                <img
+                 src={`http://localhost:3000${user.profile_image}`}
+                 alt="Profile"
+                 className="w-full h-full object-cover"
+                 />
+                     ) : (
+                <span className="text-blue-600 font-bold text-xl">
+                     {user.name?.charAt(0).toUpperCase() || 'U'}
+                </span>
+                   )}</div>
                 
 
               </button>

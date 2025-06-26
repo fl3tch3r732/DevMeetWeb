@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProfilePage() {
+
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     name: '',
-    bio: '',
-    city: '',
+    location: '',
     skills: '',
+    linkedIn: '',
+    github: '',
     image: '',
   });
   const [preview, setPreview] = useState('');
@@ -13,8 +17,13 @@ export default function ProfilePage() {
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
     if (storedUser) {
-      setUser(storedUser);
-      setPreview(storedUser.image || '');
+      setUser((prev) => ({
+       ...prev,
+       ...storedUser,
+       
+      }));
+      setPreview(storedUser.profile_image || storedUser.image || '');
+
     }
   }, []);
 
@@ -23,20 +32,50 @@ export default function ProfilePage() {
     setUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const previewURL = URL.createObjectURL(file);
-      setPreview(previewURL);
-      setUser((prev) => ({ ...prev, image: file }));
-    }
-  };
+const handleImageChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    setPreview(URL.createObjectURL(file));
+    setUser((prev) => ({ ...prev, profile_image: file, image: file }));
+  }
+};
 
-  const handleSave = () => {
-    // You can send this `user` object to your backend for saving
+const handleSave = async () => {
+  const formData = new FormData();
+  formData.append('userId', user.id || '');
+  formData.append('name', user.name || '');
+  formData.append('location', user.location || '');
+  formData.append('skills', user.skills || '');
+  formData.append('linkedIn', user.linkedIn || '');
+  formData.append('github', user.github || '');
+
+  if (user.profile_image instanceof File) {
+    formData.append('profile-image', user.profile_image); // only append file if it's a File object
+  }
+
+  try {
+    const res = await fetch('http://localhost:3000/api/user/update-profile', {
+      method: 'PUT',
+      body: formData,
+    });
+
+    const data = await res.json();
+    console.log('Update response:', data);
+
+    const updatedUser = { ...user, profile_image: data.imageUrl, image: data.imageUrl };
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
+    setPreview(`http://localhost:3000${updatedUser.profile_image}`);
+
     alert('Profile updated!');
-    console.log(user);
-  };
+    navigate('/Home');
+  } catch (err) {
+    console.error('Upload error:', err);
+    alert('Update failed.');
+  }
+};
+
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-10 flex justify-center items-start">
@@ -45,7 +84,11 @@ export default function ProfilePage() {
         <div className="w-full md:w-1/3 flex flex-col items-center text-center">
           <div className="w-32 h-32 rounded-full bg-gray-200 overflow-hidden mb-4">
             {preview ? (
-              <img src={preview} alt="Profile" className="w-full h-full object-cover" />
+              <img
+                src={preview.startsWith('blob:') ? preview : `http://localhost:3000${preview}`}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
             ) : (
               <span className="text-5xl text-gray-400 flex items-center justify-center h-full">👤</span>
             )}
@@ -54,7 +97,7 @@ export default function ProfilePage() {
             <input type="file" accept="image/*" onChange={handleImageChange} className='cursor-pointer'/></button>
           
           <h2 className="text-xl font-bold mt-4">{user.name || 'Your Name'}</h2>
-          <p className="text-gray-600">{user.city || 'City'}</p>
+          <p className="text-gray-600">{user.location || 'City'}</p>
         </div>
 
         {/* Edit form */}
@@ -64,35 +107,51 @@ export default function ProfilePage() {
             <input
               type="text"
               name="name"
-              value={user.name}
+              value={user.name || ''}
               onChange={handleChange}
               placeholder="Full Name"
               className="p-3 border rounded-md"
             />
             <input
               type="text"
-              name="city"
-              value={user.city}
+              name="location"
+              value={user.location || ''}
               onChange={handleChange}
               placeholder="City"
               className="p-3 border rounded-md"
             />
             <input
               type="text"
+              name="linkedIn"
+              value={user.linkedIn || ''}
+              onChange={handleChange}
+              placeholder="Link to LinkedIn"
+              className="p-3 border rounded-md col-span-1 sm:col-span-2"
+            />
+             <input
+              type="text"
+              name="github"
+              value={user.github || ''}
+              onChange={handleChange}
+              placeholder="Link to github"
+              className="p-3 border rounded-md col-span-1 sm:col-span-2"
+            />
+             <input
+              type="text"
               name="skills"
-              value={user.skills}
+              value={user.skills || ''}
               onChange={handleChange}
               placeholder="Skills (comma separated)"
               className="p-3 border rounded-md col-span-1 sm:col-span-2"
             />
-            <textarea
+            {/* <textarea
               name="bio"
               value={user.bio}
               onChange={handleChange}
               placeholder="Short bio"
               className="p-3 border rounded-md col-span-1 sm:col-span-2"
               rows={3}
-            />
+            /> */}
           </div>
           <button
             onClick={handleSave}

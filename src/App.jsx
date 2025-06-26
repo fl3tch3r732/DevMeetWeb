@@ -5,6 +5,7 @@ import LogIn from "./screens/LogIn";
 import SignUp from './screens/SignUp';
 import { useAuth } from "./context/useAuth"; // <-- Import useAuth hook
 import ProfilePage from "./screens/ProfilePage";
+import UserProfile from "./screens/PublicProfile";
 
 
 function App() {
@@ -20,12 +21,14 @@ function App() {
             <Route path="/Home" element={<Homescreen />} />
             <Route path="/" element={<LogIn />} />
             <Route path="/profilepage" element={<ProfilePage />} />
+            <Route path="/login" element={<LogIn />} />
+            <Route path="/profile/:id" element={<UserProfile />} />
+            <Route path="*" element={<Homescreen />} />
           </>
         ) : (
           <>
-            <Route path="/login" element={<LogIn />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="*" element={<LogIn/>} />
+            
+          <Route path="/signup" element={<SignUp />} />
           </>
         )}
     </Routes>

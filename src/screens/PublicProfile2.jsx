@@ -1,50 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-export default function UserProfile() {
+export default function PublicProfile() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
 
-  const [currentUser, setCurrentUser] = useState(null);
+//   const [currentUser, setCurrentUser] = useState(null);
  
 
-    useEffect(() => {
-      // Get current user
-      const storedUser = JSON.parse(localStorage.getItem('user'));
-      if (storedUser) setCurrentUser(storedUser);
+//     useEffect(() => {
+//       // Get current user
+//       const storedUser = JSON.parse(localStorage.getItem('user'));
+//       if (storedUser) setCurrentUser(storedUser);
   
-      // Fetch all users
-      fetch('http://localhost:3000/api/user')
-        .then((res) => res.json())
-        .then((data) => {
-          console.log('Fetched users:', data);
-        })
-        .catch((err) => console.error('Error:', err));
-    }, []);
+//       // Fetch all users
+//       fetch('http://localhost:3000/api/user')
+//         .then((res) => res.json())
+//         .then((data) => {
+//           console.log('Fetched users:', data);
+//         })
+//         .catch((err) => console.error('Error:', err));
+//     }, []);
 
-    const sendConnectionRequest = async (receiverId) => {
-    if (!currentUser?.id) return alert('You must be logged in to connect.');
+//     const sendConnectionRequest = async (receiverId) => {
+//     if (!currentUser?.id) return alert('You must be logged in to connect.');
 
-    try {
-      const res = await fetch('http://localhost:3000/api/connection/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          senderId: currentUser.id,
-          receiverId: receiverId,
-        }),
-      });
+//     try {
+//       const res = await fetch('http://localhost:3000/api/connection/send', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//           senderId: currentUser.id,
+//           receiverId: receiverId,
+//         }),
+//       });
 
-      const data = await res.json();
-      console.log('Connection request sent:', data);
-      alert('Connection request sent!');
-    } catch (err) {
-      console.error('Failed to send request:', err);
-      alert('Could not send request.');
-    }
-  };
+//       const data = await res.json();
+//       console.log('Connection request sent:', data);
+//       alert('Connection request sent!');
+//     } catch (err) {
+//       console.error('Failed to send request:', err);
+//       alert('Could not send request.');
+//     }
+//   };
 
   useEffect(() => {
     if (!id) return;
@@ -133,19 +134,16 @@ export default function UserProfile() {
                 <p className="text-gray-400 italic">No social links provided.</p>
               )}
             </div>
-            
-            {/* Debug info - remove this once you find the issue
-            <div className="mt-2 text-xs text-gray-400">
-              Debug: linkedIn={user.linkedIn}, linkedin={user.linkedin}
-            </div> */}
           </div>
 
-          <button 
-            className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
-            onClick={()=> sendConnectionRequest()}
-          >
-            Connect
+
+           <Link to={`/chat/${user.id}`}>
+           <button  className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">
+            Discuss
           </button>
+           </Link>
+
+          
         </div>
       </div>
     </div>

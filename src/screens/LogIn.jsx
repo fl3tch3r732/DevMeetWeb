@@ -6,9 +6,11 @@ import Footer from '../components/Footer'
 import { data, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/useAuth'
+import { toast } from 'react-toastify'; // Import toast for notifications
 
 export default function LogIn() {
 
+const Toast = toast; // Initialize toast for notifications
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
 const navigate = useNavigate();
@@ -34,6 +36,7 @@ const {login} = useAuth(); // Assuming you have a login function in your AuthCon
       
       navigate('/Home'); // redirect to protected route
       
+      Toast.success('Login successful!'); // Show success notification
       console.log('Login successful!');
       console.log('Server response:', data);
 

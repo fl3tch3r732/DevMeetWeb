@@ -11,9 +11,9 @@ export default function NavBar() {
 
   const links = [
     { name: 'Home', onClick: () => navigate('/Home') },
-    { name: 'Discover Developers', onClick: () => navigate('/discover') },
+    { name: 'Requests', onClick: () => navigate('/requests') },
     { name: 'My Connections', onClick: () => navigate('/connections') },
-    { name: 'Messages', onClick: () => navigate('/messages') },
+    { name: 'Messages', onClick: () => navigate('/inbox') },
     { name: 'Settings', onClick: () => navigate('/settings') },
   ];
 
@@ -33,7 +33,7 @@ export default function NavBar() {
             <li
               key={link.name}
               onClick={link.onClick}
-              className="cursor-pointer text-gray-700 hover:text-blue-600 font-medium"
+              className="cursor-pointer text-gray-700 font-medium hover:underline transition-all"
             >
               {link.name}
             </li>
@@ -46,22 +46,19 @@ export default function NavBar() {
             <div className="relative">
               <button
                 onClick={() => setAvatarDropdownOpen(!avatarDropdownOpen)}
-                className="w-10 h-10 rounded-full bg-blue-500 text-white font-semibold flex items-center justify-center focus:outline-none"
+                className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center focus:outline-none hover:scale-[1.03] transition-transform cursor-pointer"
               >
-                <div className='cursor-pointer mt-4 w-20 h-10 rounded-full overflow-hidden bg-gray-200 mb-4 flex items-center justify-center hover:scale-[1.03]'>
-                  {user.profile_image ? (
-                <img
-                 src={`http://localhost:3000${user.profile_image}`}
-                 alt="Profile"
-                 className="w-full h-full object-cover"
-                 />
-                     ) : (
-                <span className="text-blue-600 font-bold text-xl">
-                     {user.name?.charAt(0).toUpperCase() || 'U'}
-                </span>
-                   )}</div>
-                
-
+                {user.profile_image ? (
+                  <img
+                    src={`http://localhost:3000${user.profile_image}`}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-blue-600 font-bold text-lg">
+                    {user.name?.charAt(0).toUpperCase() || 'U'}
+                  </span>
+                )}
               </button>
 
               {avatarDropdownOpen && (
@@ -71,7 +68,7 @@ export default function NavBar() {
                       setAvatarDropdownOpen(false);
                       navigate('/profilepage');
                     }}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-800"
                   >
                     Profile
                   </button>
@@ -128,7 +125,7 @@ export default function NavBar() {
             <div className="pt-2">
               <button
                 onClick={handleLogout}
-                className="w-full text-left text-red-600 mt-2 hover:underline"
+                className=" w-full text-left text-red-600 mt-2 hover:underline "
               >
                 Logout
               </button>

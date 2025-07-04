@@ -3,8 +3,11 @@ import Button from '../components/Button'
 import Footer from '../components/Footer'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export default function SignUp() {
+
+  const Toast = toast;
 
   const navigate = useNavigate();
 
@@ -57,7 +60,8 @@ const handleSubmit = async (e) => {
     }
 
     console.log('User signed up:', data);
-    alert('Signup successful!');
+    Toast.success('Signup successful!');
+    
     // Optionally, you can redirect the user to the login page or another page
     
     navigate('/login');

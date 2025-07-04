@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function ProfilePage() {
 
+  const Toast = toast;
   const navigate = useNavigate();
   const [user, setUser] = useState({
     name: '',
@@ -67,7 +69,8 @@ const handleSave = async () => {
     setUser(updatedUser);
     setPreview(`http://localhost:3000${updatedUser.profile_image}`);
 
-    alert('Profile updated!');
+    //alert('Profile updated!');
+    Toast.success('Profile updated!');
     navigate('/Home');
   } catch (err) {
     console.error('Upload error:', err);

@@ -6,15 +6,15 @@ import Footer from '../components/Footer'
 import { data, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/useAuth'
-import { toast } from 'react-toastify'; // Import toast for notifications
+import { toast } from 'react-toastify';
 
 export default function LogIn() {
 
-const Toast = toast; // Initialize toast for notifications
+const Toast = toast; //toast for notifications
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
 const navigate = useNavigate();
-const {login} = useAuth(); // Assuming you have a login function in your AuthContext  
+const {login} = useAuth();
 
  const handleLogin = async (e) => {
     e.preventDefault();
@@ -27,9 +27,9 @@ const {login} = useAuth(); // Assuming you have a login function in your AuthCon
 
       const { token, user } = res.data;
 
-      // // Store JWT in localStorage
-      // localStorage.setItem('token', token);
-      // localStorage.setItem('user', JSON.stringify(user));
+      // Store JWT in localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
 
       if (!token) throw new Error('No token received from server');
       login({ token, user }); // Call login function from AuthContext

@@ -5,7 +5,7 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // ✅ Add loading state
+  const [loading, setLoading] = useState(true); 
 
   // Load token and user from localStorage on mount
   useEffect(() => {
@@ -23,15 +23,15 @@ const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Failed to restore auth state:', error);
-      // Clear corrupted data
+    
       localStorage.removeItem('token');
       localStorage.removeItem('user');
     } finally {
-      setLoading(false); // ✅ Set loading to false after initialization
+      setLoading(false); 
     }
   }, []);
 
-  // ✅ Login handler with better error handling
+
   const login = ({ token: newToken, user: userData }) => {
     try {
       localStorage.setItem('token', newToken);
@@ -40,11 +40,11 @@ const AuthProvider = ({ children }) => {
       setUser(userData);
     } catch (error) {
       console.error('Failed to save auth data:', error);
-      throw error; // Re-throw so calling code can handle it
+      throw error; 
     }
   };
 
-  // ✅ Logout with error handling
+  // Logout with error handling
   const logout = () => {
     try {
       localStorage.removeItem('token');
@@ -56,12 +56,12 @@ const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  // ✅ Helper function to check if user is authenticated
+  // Helper function to check if user is authenticated
   const isAuthenticated = () => {
     return !!(token && user);
   };
 
-  // ✅ Function to update user data (useful for profile updates)
+  // Function to update user data (useful for profile updates)
   const updateUser = (updatedUserData) => {
     try {
       const newUserData = { ...user, ...updatedUserData };
@@ -76,11 +76,11 @@ const AuthProvider = ({ children }) => {
   const value = {
     token,
     user,
-    loading, // ✅ Expose loading state
+    loading,
     login,
     logout,
     isAuthenticated,
-    updateUser, // ✅ Helper for updating user data
+    updateUser, 
   };
 
   return (

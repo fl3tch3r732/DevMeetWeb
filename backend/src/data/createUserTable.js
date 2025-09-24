@@ -25,6 +25,25 @@ const createUserTable = async () => {
 }
 export default createUserTable;
 
+export const createMessagesTable = async () => {
+    const query = `
+        CREATE TABLE IF NOT EXISTS messages (
+            id SERIAL PRIMARY KEY,
+            sender_id INTEGER REFERENCES users(id),
+            receiver_id INTEGER REFERENCES users(id),
+            content TEXT NOT NULL,
+            is_read BOOLEAN DEFAULT FALSE,
+            sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    `;
+    try {
+        await pool.query(query);
+        console.log("Messages table created successfully!");
+    } catch (error) {
+        console.error("Error creating messages table:", error);
+    }
+}
+
 export const createConnectionsTable = async () => {
     const query = `
        CREATE TABLE IF NOT EXISTS connections (
@@ -41,23 +60,5 @@ export const createConnectionsTable = async () => {
         console.log("Connections table created successfully!");
     } catch (error) {
         console.error("Error creating connections table:", error);
-    }
-}
-
-export const createMessagesTable = async () => {
-    const query = `
-        CREATE TABLE IF NOT EXISTS messages (
-            id SERIAL PRIMARY KEY,
-            sender_id INTEGER REFERENCES users(id),
-            receiver_id INTEGER REFERENCES users(id),
-            content TEXT NOT NULL,
-            sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    `;
-    try {
-        await pool.query(query);
-        console.log("Messages table created successfully!");
-    } catch (error) {
-        console.error("Error creating messages table:", error);
     }
 }

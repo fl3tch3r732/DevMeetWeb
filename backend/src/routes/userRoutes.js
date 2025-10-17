@@ -27,6 +27,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+
 router.post("/signup", validateUser, signUp)
 router.post("/login", logIn)
 router.get("/user", getAllUsers)
@@ -44,10 +45,6 @@ router.get('/connection/pending/:userId', getMyRequests);
 router.get('/connection/list/:userId', getMyConnections);
 
 // in routes/messageRoutes.js
-
-
-
-
 router.post('/messages/send', sendMessage);
 router.get('/messages/:userId', getMessages);
 router.get('/messages/conversation/:userId1/:userId2', getConversationBetweenUsers);

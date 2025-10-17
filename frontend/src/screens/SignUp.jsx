@@ -29,7 +29,7 @@ export default function SignUp() {
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  // Validate password and confirmPassword match
+ 
   if (form.password !== form.confirmPassword) {
     alert('Passwords do not match');
     return;

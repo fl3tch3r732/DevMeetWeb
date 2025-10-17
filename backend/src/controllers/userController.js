@@ -1,7 +1,6 @@
 import { createUserService, getAllUserService, getUserByIdUserService, deleteUserService, getUserByEmail, updateUserProfile } from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
 import  jwt  from 'jsonwebtoken';
-import multer from 'multer';
 import db from '../config/db.js';
 
 const handleResponse = (res, status, message, data = null) => {
@@ -11,6 +10,7 @@ const handleResponse = (res, status, message, data = null) => {
         data,
     });
 }
+
 
 export const signUp = async (req, res, next) => {
     const { name, email, location, skills, github, linkedIn, password } = req.body;
@@ -51,7 +51,7 @@ export const logIn = async (req, res, next) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { id: user.id, email: user.email }, // payload
+      { id: user.id, email: user.email },
       process.env.JWT_SECRET, // secret key
       { expiresIn: '2h' }
     );
@@ -61,11 +61,17 @@ export const logIn = async (req, res, next) => {
 
     return res.status(200).json({
       message: 'Login successful',
-      token, // ✅ This is what the frontend needs
+      token, // This is what the frontend needs
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
+        location:user.location,
+        skills:user.skills,
+        linkedIn:user.linkedin,
+        github:user.github,
+        image:user.image,
+
       },
     });
 

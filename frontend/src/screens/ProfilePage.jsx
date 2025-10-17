@@ -4,6 +4,9 @@ import { toast } from 'react-toastify';
 
 export default function ProfilePage() {
 
+  const storeduser = JSON.parse(localStorage.getItem('user'));
+  //const {uSer}= storeduser;
+
   const Toast = toast;
   const navigate = useNavigate();
   const [user, setUser] = useState({
@@ -14,20 +17,21 @@ export default function ProfilePage() {
     github: '',
     image: '',
   });
+
   const [preview, setPreview] = useState('');
 
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-    if (storedUser) {
-      setUser((prev) => ({
-       ...prev,
-       ...storedUser,
+  // useEffect(() => {
+  //   const storedUser = storeduser;
+  //   if (storedUser) {
+  //     setUser((prev) => ({
+  //      ...prev,
+  //      ...storedUser
        
-      }));
-      setPreview(storedUser.profile_image || storedUser.image || '');
+  //     }));
+  //     setPreview(storedUser.profile_image || storedUser.image || '');
 
-    }
-  }, []);
+  //   }
+  // }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,14 +46,33 @@ const handleImageChange = (e) => {
   }
 };
 
+useEffect(() => {
+  if (storeduser) {
+    setUser((prev) => ({
+      ...prev,
+      name: storeduser.name || '',
+      location: storeduser.location || '',
+      skills: storeduser.skills || '',
+      linkedIn: storeduser.linkedIn || '',
+      github: storeduser.github || '',
+      image: storeduser.image || '',
+      profile_image: storeduser.profile_image || '',
+      id: storeduser.id || storeduser._id || '',
+    }));
+    setPreview(storeduser.profile_image || storeduser.image || '');
+  }
+}, []);
+
+const {id, name, location, skills, linkedIn, github} = user;
+
 const handleSave = async () => {
   const formData = new FormData();
-  formData.append('userId', user.id || '');
-  formData.append('name', user.name || '');
-  formData.append('location', user.location || '');
-  formData.append('skills', user.skills || '');
-  formData.append('linkedIn', user.linkedIn || '');
-  formData.append('github', user.github || '');
+  formData.append('userId', id || '');
+  formData.append('name', name || '');
+  formData.append('location', location || '');
+  formData.append('skills', skills || '');
+  formData.append('linkedIn', linkedIn || '');
+  formData.append('github', github || '');
 
   if (user.profile_image instanceof File) {
     formData.append('profile-image', user.profile_image); // only append file if it's a File object
@@ -110,7 +133,7 @@ const handleSave = async () => {
             <input
               type="text"
               name="name"
-              value={user.name || ''}
+              value={name || ''}
               onChange={handleChange}
               placeholder="Full Name"
               className="p-3 border rounded-md"
@@ -118,7 +141,7 @@ const handleSave = async () => {
             <input
               type="text"
               name="location"
-              value={user.location || ''}
+              value={location || ''}
               onChange={handleChange}
               placeholder="City"
               className="p-3 border rounded-md"
@@ -126,7 +149,7 @@ const handleSave = async () => {
             <input
               type="text"
               name="linkedIn"
-              value={user.linkedIn || ''}
+              value={linkedIn || ''}
               onChange={handleChange}
               placeholder="Link to LinkedIn"
               className="p-3 border rounded-md col-span-1 sm:col-span-2"
@@ -134,7 +157,7 @@ const handleSave = async () => {
              <input
               type="text"
               name="github"
-              value={user.github || ''}
+              value={github || ''}
               onChange={handleChange}
               placeholder="Link to github"
               className="p-3 border rounded-md col-span-1 sm:col-span-2"
@@ -142,7 +165,7 @@ const handleSave = async () => {
              <input
               type="text"
               name="skills"
-              value={user.skills || ''}
+              value={skills || ''}
               onChange={handleChange}
               placeholder="Skills (comma separated)"
               className="p-3 border rounded-md col-span-1 sm:col-span-2"

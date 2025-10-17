@@ -16,6 +16,11 @@ import http from "http";
 
 dotenv.config();
 
+if (!process.env.JWT_SECRET) {
+  console.error('Missing JWT_SECRET in environment');
+  process.exit(1);
+}
+
 const app = express();
 const httpServer = http.createServer(app);
 
@@ -28,16 +33,15 @@ app.use(cors());
 
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:5173', // allow your frontend URL
+    origin: 'http://localhost:5173 || http://172.20.10.5:8081', // allow your frontend URL
     methods: ['GET', 'POST'],
   },
 });
 
-// ✅ Socket.io events
 io.on('connection', (socket) => {
   console.log(`⚡ New client connected: ${socket.id}`);
 
-  // Join room for private chat
+
   socket.on('join_room', (room) => {
     socket.join(room);
     console.log(`Socket ${socket.id} joined room ${room}`);

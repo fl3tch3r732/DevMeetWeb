@@ -35,7 +35,7 @@ export const logIn = async (req, res, next) => {
   }
 
   try {
-    // Get user by email (not email & password)
+    // Get user by email
     const user = await getUserByEmail(email);
 
     if (!user) {

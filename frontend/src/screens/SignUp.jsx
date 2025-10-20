@@ -60,10 +60,7 @@ const handleSubmit = async (e) => {
     }
 
     console.log('User signed up:', data);
-    Toast.success('Signup successful!');
-    
-    // Optionally, you can redirect the user to the login page or another page
-    
+    Toast.success('Signup successful!');  
     navigate('/login');
   0;
   } catch (err) {

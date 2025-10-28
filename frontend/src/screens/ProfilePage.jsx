@@ -20,19 +20,6 @@ export default function ProfilePage() {
 
   const [preview, setPreview] = useState('');
 
-  // useEffect(() => {
-  //   const storedUser = storeduser;
-  //   if (storedUser) {
-  //     setUser((prev) => ({
-  //      ...prev,
-  //      ...storedUser
-       
-  //     }));
-  //     setPreview(storedUser.profile_image || storedUser.image || '');
-
-  //   }
-  // }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));

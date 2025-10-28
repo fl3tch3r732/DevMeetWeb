@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 
@@ -14,8 +14,19 @@ export default function NavBar() {
     { name: 'Requests', onClick: () => navigate('/requests') },
     { name: 'My Connections', onClick: () => navigate('/connections') },
     { name: 'Messages', onClick: () => navigate('/inbox') },
-    { name: 'Settings', onClick: () => navigate('/settings') },
+    { name: 'Settings', onClick: () => navigate('/profilepage') },
   ];
+  const GetImage = () => {
+    useEffect(()=>{
+      try {
+        fetch()
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+    })
+  }
 
   const handleLogout = () => {
     logout();
@@ -50,7 +61,7 @@ export default function NavBar() {
               >
                 {user.profile_image ? (
                   <img
-                    src={`http://localhost:3000${user.profile_image}`}
+                    src={`http://localhost:3000${user.image}`}
                     alt="Profile"
                     className="w-full h-full object-cover"
                   />

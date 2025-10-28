@@ -35,7 +35,6 @@ function App() {
             <Route path="/requests" element={<RequestsPage />} />
             <Route path="/connections" element={<Connections />} />
             <Route path="/chat/:otherUserId" element={<ChatPage />} />
-
             <Route path="/inbox" element={<InboxPage />} />
 
 
@@ -44,11 +43,8 @@ function App() {
           <>
           <Route path="login" element={<LogIn />} />
           <Route path="/signup2" element={<SignUp2 />} />
-          {/* <Route path="/Home" element={<Homescreen />} /> */}
           <Route path="/" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
-          {/* <Route path="/requests" element={<RequestsPage />} />
-          <Route path="/connections" element={<Connections />} /> */}
           </>
         )}
     </Routes>

@@ -15,13 +15,39 @@ const handleResponse = (res, status, message, data = null) => {
 export const signUp = async (req, res, next) => {
     const { name, email, location, skills, github, linkedIn, password } = req.body;
     // Validate input
-    if (!name || !email || !location || !skills || !github || !linkedIn || !password) {
+    if (!name || !email || !location || !password) {
         return handleResponse(res, 400, "All fields are required");
     }
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await createUserService(name, email, location, skills, github, linkedIn, hashedPassword);
         handleResponse(res, 201, "User created successfully", newUser);
+
+    //     const token = jwt.sign(
+    //      { id: user.id, email: user.email },
+    //       process.env.JWT_SECRET, // secret key
+    //       { expiresIn: '2h' }
+    // );
+
+    //Return token + user info (not password)
+    //const { password: _, ...userInfo } = user;
+
+    // return res.status(200).json({
+    //   message: 'Signup successful',
+    //   token, // This is what the frontend needs
+    //   user: {
+    //     id: user.id,
+    //     name: user.name,
+    //     email: user.email,
+    //     location:user.location,
+    //     skills:user.skills,
+    //     linkedIn:user.linkedin,
+    //     github:user.github,
+    //     image:user.image,
+
+    //   },
+    // });
+
     } catch (err) {
         next(err);
     }
@@ -70,7 +96,7 @@ export const logIn = async (req, res, next) => {
         skills:user.skills,
         linkedIn:user.linkedin,
         github:user.github,
-        image:user.image,
+        image:user.profile_image,
 
       },
     });

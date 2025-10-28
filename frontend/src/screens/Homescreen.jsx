@@ -138,7 +138,7 @@ export default function Homescreen() {
           {filteredUsers.map((user, index) => (
             <div className="w-full" key={user.id || index}>
               <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center transition duration-300 hover:shadow-2xl hover:scale-[1.03]">
-                <Link to={`/profile/${user.id}`} className="block w-full flex flex-col items-center">
+                <Link to={`/profile/${user.id}`} className=" w-full flex flex-col items-center">
                   <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 mb-4 flex items-center justify-center">
                     {user.profile_image ? (
                       <img

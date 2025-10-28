@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function UserProfile() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
-
   const [currentUser, setCurrentUser] = useState(null);
+
+  const Toast = toast;
  
 
     useEffect(() => {
@@ -39,7 +41,7 @@ export default function UserProfile() {
 
       const data = await res.json();
       console.log('Connection request sent:', data);
-      alert('Connection request sent!');
+      Toast('Connection request sent!');
     } catch (err) {
       console.error('Failed to send request:', err);
       alert('Could not send request.');
@@ -133,11 +135,6 @@ export default function UserProfile() {
                 <p className="text-gray-400 italic">No social links provided.</p>
               )}
             </div>
-            
-            {/* Debug info - remove this once you find the issue
-            <div className="mt-2 text-xs text-gray-400">
-              Debug: linkedIn={user.linkedIn}, linkedin={user.linkedin}
-            </div> */}
           </div>
 
           <button 

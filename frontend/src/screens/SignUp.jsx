@@ -93,6 +93,7 @@ const handleSubmit = async (e) => {
                  placeholder='Full name'
                  onChange={handleChange}
                  value={form.name}
+                 required
                  className=' p-4 mb-5 bg-gray-100 rounded-lg top-4 w-96 border-2 border-gray-200 '
                  />
                  <input type="email" name="email" id="email"
@@ -110,19 +111,19 @@ const handleSubmit = async (e) => {
                  className=' p-4 mb-5 bg-gray-100 rounded-lg top-4 w-96 border-2 border-gray-200 '
                  />
                  <input type="text" name="skills" id="skills"
-                 placeholder='Skills (ex: Java, python, c#...)'
+                 placeholder='Skills (ex: Java, python, c#...) (optional)'
                   onChange={handleChange}
                   value={form.skills}
                  className=' p-4 mb-5 bg-gray-100 rounded-lg top-4 w-96 border-2 border-gray-200 '
                  />
                   <input type="text" name="github" id="github-link"
-                 placeholder='Your GitHub'
+                 placeholder='Your GitHub (optional)'
                   onChange={handleChange}
                   value={form.github}
                  className=' p-4 mb-5 bg-gray-100 rounded-lg top-4 w-96 border-2 border-gray-200 '
                  />
                   <input type="text" name="linkedIn" id="linkedin-link"
-                 placeholder='Your LinkedIn'
+                 placeholder='Your LinkedIn (optional)'
                   onChange={handleChange}
                   value={form.linkedIn}
                  className=' p-4 mb-5 bg-gray-100 rounded-lg top-4 w-96 border-2 border-gray-200 '

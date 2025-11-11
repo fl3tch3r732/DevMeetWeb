@@ -31,7 +31,6 @@ const AuthProvider = ({ children }) => {
     }
   }, []);
 
-
   const login = ({ token: newToken, user: userData }) => {
     try {
       localStorage.setItem('token', newToken);

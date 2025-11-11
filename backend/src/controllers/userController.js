@@ -1,7 +1,8 @@
-import { createUserService, getAllUserService, getUserByIdUserService, deleteUserService, getUserByEmail, updateUserProfile } from '../models/userModel.js';
+import { createUserService, getAllUserService, getUserByIdUserService, deleteUserService, getUserByEmail, updateUserProfile, profile_pic } from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
 import  jwt  from 'jsonwebtoken';
 import db from '../config/db.js';
+import e from 'express';
 
 const handleResponse = (res, status, message, data = null) => {
     res.status(status).json({
@@ -23,30 +24,6 @@ export const signUp = async (req, res, next) => {
         const newUser = await createUserService(name, email, location, skills, github, linkedIn, hashedPassword);
         handleResponse(res, 201, "User created successfully", newUser);
 
-    //     const token = jwt.sign(
-    //      { id: user.id, email: user.email },
-    //       process.env.JWT_SECRET, // secret key
-    //       { expiresIn: '2h' }
-    // );
-
-    //Return token + user info (not password)
-    //const { password: _, ...userInfo } = user;
-
-    // return res.status(200).json({
-    //   message: 'Signup successful',
-    //   token, // This is what the frontend needs
-    //   user: {
-    //     id: user.id,
-    //     name: user.name,
-    //     email: user.email,
-    //     location:user.location,
-    //     skills:user.skills,
-    //     linkedIn:user.linkedin,
-    //     github:user.github,
-    //     image:user.image,
-
-    //   },
-    // });
 
     } catch (err) {
         next(err);
@@ -85,6 +62,11 @@ export const logIn = async (req, res, next) => {
     //Return token + user info (not password)
     const { password: _, ...userInfo } = user;
 
+    // user.profile_image already includes /uploads/ prefix from database
+    const profilePictureUrl = user.profile_image 
+      ? `${req.protocol}://${req.get('host')}${user.profile_image}`
+      : null;
+
     return res.status(200).json({
       message: 'Login successful',
       token, // This is what the frontend needs
@@ -96,7 +78,7 @@ export const logIn = async (req, res, next) => {
         skills:user.skills,
         linkedIn:user.linkedin,
         github:user.github,
-        image:user.profile_image,
+        image:profilePictureUrl,
 
       },
     });
@@ -131,13 +113,22 @@ export const getUserById = async (req, res) => {
     }
 
     res.status(200).json({ user: result.rows[0] });
+
+    // const profilePictureUrl = user.profile_image 
+    //   ? `${req.protocol}://${req.get('host')}/uploads/${user.profile_image}`
+    //   : null;
+
+    // res.json({
+    //   id: user.id,
+    //   username: user.username,
+    //   email: user.email,
+    //   profile_image: profilePictureUrl
+    // });
   } catch (error) {
     console.error('Error getting user by ID:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
-
 
 export const updateProfile = async (req, res) => {
   try {
@@ -156,10 +147,15 @@ export const updateProfile = async (req, res) => {
       [name, location, skills, linkedIn, github, profile_image, userId]
     );
 
+   // Construct full URL for profile image (consistent with login)
+   const profilePictureUrl = result.rows[0].profile_image 
+     ? `${req.protocol}://${req.get('host')}${result.rows[0].profile_image}`
+     : null;
+
    res.status(200).json({
   message: 'Profile updated',
   user: result.rows[0],
-  imageUrl: result.rows[0].profile_image, // ✅ this line is critical
+  imageUrl: profilePictureUrl, // Return full URL like login does
 });
 
 
@@ -181,3 +177,18 @@ export const deleteUser = async (req, res, next) => {
         next(err);
     }
 }
+
+// export const getProfileImage = async (req, res, next) => {
+//   try{
+//     const userId = req.user?.id;
+//     const {profileImage} = await profile_pic({id:userId});
+//     if(!userId) return res.status(401).json({message: 'Not authenticated'});
+//     if(!profileImage) return handleResponse(res, 404, 'profile pic not found');
+//     handleResponse(res, 200, 'profile pic fetched with success');
+    
+//     return res.json({profileImage});
+//   }
+//   catch(err){
+//     next(err);
+//   }
+// }

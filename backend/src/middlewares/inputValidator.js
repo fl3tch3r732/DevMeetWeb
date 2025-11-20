@@ -4,9 +4,9 @@ const userScheme = Joi.object({
   name: Joi.string().min(3).max(30).required(),
   email: Joi.string().email().required(),
   location: Joi.string().min(3).max(30).required(),
-  skills: Joi.string().min(3).max(30).required(),
-  github: Joi.string().uri().optional(),
-  linkedIn: Joi.string().uri().optional(),
+  skills: Joi.string().min(3).max(30).allow('',null).optional(),
+  github: Joi.string().uri().allow('', null).optional(),
+  linkedIn: Joi.string().uri().allow('',null).optional(),
   password: Joi.string().min(8).max(15).required()
 });
 

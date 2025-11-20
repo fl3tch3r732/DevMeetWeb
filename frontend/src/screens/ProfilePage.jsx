@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useAuth } from '../context/useAuth';
 
 export default function ProfilePage() {
 
   const storeduser = JSON.parse(localStorage.getItem('user'));
+  const { updateUser } = useAuth();
   //const {uSer}= storeduser;
 
   const Toast = toast;
@@ -19,19 +21,6 @@ export default function ProfilePage() {
   });
 
   const [preview, setPreview] = useState('');
-
-  // useEffect(() => {
-  //   const storedUser = storeduser;
-  //   if (storedUser) {
-  //     setUser((prev) => ({
-  //      ...prev,
-  //      ...storedUser
-       
-  //     }));
-  //     setPreview(storedUser.profile_image || storedUser.image || '');
-
-  //   }
-  // }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,10 +76,24 @@ const handleSave = async () => {
     const data = await res.json();
     console.log('Update response:', data);
 
-    const updatedUser = { ...user, profile_image: data.imageUrl, image: data.imageUrl };
+    // Use the full URL from the response, or construct it if it's just a path
+    const imageUrl = data.imageUrl || (data.user?.profile_image ? `http://localhost:3000${data.user.profile_image}` : null);
+    const updatedUser = { 
+      ...user, 
+      name: data.user?.name || user.name,
+      location: data.user?.location || user.location,
+      skills: data.user?.skills || user.skills,
+      linkedIn: data.user?.linkedin || data.user?.linkedIn || user.linkedIn,
+      github: data.user?.github || user.github,
+      profile_image: data.user?.profile_image || user.profile_image, 
+      image: imageUrl 
+    };
     localStorage.setItem('user', JSON.stringify(updatedUser));
     setUser(updatedUser);
-    setPreview(`http://localhost:3000${updatedUser.profile_image}`);
+    // Update AuthContext so NavBar gets the updated user immediately
+    updateUser(updatedUser);
+    // Update preview with full URL
+    //setPreview(imageUrl || (data.user?.profile_image ? `http://localhost:3000${data.user.profile_image}` : ''));
 
     //alert('Profile updated!');
     Toast.success('Profile updated!');
@@ -111,7 +114,7 @@ const handleSave = async () => {
           <div className="w-32 h-32 rounded-full bg-gray-200 overflow-hidden mb-4">
             {preview ? (
               <img
-                src={preview.startsWith('blob:') ? preview : `http://localhost:3000${preview}`}
+                src={preview.startsWith('blob:') ? preview : preview}
                 alt="Profile"
                 className="w-full h-full object-cover"
               />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 
@@ -7,15 +7,46 @@ export default function NavBar() {
   const { logout, token, user } = useAuth();
 
   const [menuOpen, setMenuOpen] = useState(false);
+  //const [profile_image, setProfilePic] = useState()
   const [avatarDropdownOpen, setAvatarDropdownOpen] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Helper function to get the full image URL
+  const getImageUrl = (image) => {
+    if (!image) return null;
+    // If it's already a full URL (starts with http:// or https://), return as is
+    if (image.startsWith('http://') || image.startsWith('https://')) {
+      return image;
+    }
+    // If it's a path (starts with /), prepend the base URL
+    if (image.startsWith('/')) {
+      return `http://localhost:3000${image}`;
+    }
+    // Otherwise return as is (might be a blob URL or other format)
+    return image;
+  };
+
+  const imageUrl = getImageUrl(user?.image);
+
+  // Reset image state when imageUrl changes
+  useEffect(() => {
+    if (imageUrl) {
+      setImageError(false);
+      setImageLoaded(false);
+    }
+  }, [imageUrl]);
 
   const links = [
     { name: 'Home', onClick: () => navigate('/Home') },
     { name: 'Requests', onClick: () => navigate('/requests') },
     { name: 'My Connections', onClick: () => navigate('/connections') },
     { name: 'Messages', onClick: () => navigate('/inbox') },
-    { name: 'Settings', onClick: () => navigate('/settings') },
+    { name: 'Settings', onClick: () => navigate('/profilepage') },
   ];
+
+ 
+  console.log(user?.image)
 
   const handleLogout = () => {
     logout();
@@ -46,17 +77,26 @@ export default function NavBar() {
             <div className="relative">
               <button
                 onClick={() => setAvatarDropdownOpen(!avatarDropdownOpen)}
-                className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center focus:outline-none hover:scale-[1.03] transition-transform cursor-pointer"
+                className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center focus:outline-none hover:scale-[1.03] transition-transform cursor-pointer relative"
               >
-                {user.profile_image ? (
+                {imageUrl && !imageError ? (
                   <img
-                    src={`http://localhost:3000${user.profile_image}`}
+                    src={imageUrl}
                     alt="Profile"
                     className="w-full h-full object-cover"
+                    onError={() => {
+                      setImageError(true);
+                      setImageLoaded(false);
+                    }}
+                    onLoad={() => {
+                      setImageError(false);
+                      setImageLoaded(true);
+                    }}
                   />
-                ) : (
-                  <span className="text-blue-600 font-bold text-lg">
-                    {user.name?.charAt(0).toUpperCase() || 'U'}
+                ) : null}
+                {(!imageUrl || imageError || !imageLoaded) && (
+                  <span className="text-blue-600 font-bold text-lg absolute inset-0 flex items-center justify-center">
+                    {user?.name?.charAt(0).toUpperCase() || 'U'}
                   </span>
                 )}
               </button>

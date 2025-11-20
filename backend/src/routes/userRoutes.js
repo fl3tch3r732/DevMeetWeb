@@ -32,6 +32,7 @@ router.post("/signup", validateUser, signUp)
 router.post("/login", logIn)
 router.get("/user", getAllUsers)
 router.get("/user/:id", getUserById)
+//router.get('/user/profile_image/:userId', getProfileImage)
 router.get('/api/protected', verifyToken, (req, res) => {
   res.json({ message: `Hello ${req.user.email}` });
 });
@@ -49,10 +50,6 @@ router.post('/messages/send', sendMessage);
 router.get('/messages/:userId', getMessages);
 router.get('/messages/conversation/:userId1/:userId2', getConversationBetweenUsers);
 router.get('/messages/conversations/:userId', getConversations);
-
-
-
-
 
 
 export default router;

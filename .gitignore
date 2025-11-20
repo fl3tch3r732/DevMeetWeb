@@ -36,3 +36,13 @@ logs/
 *.swp
 *.bak
 *.tmp
+
+# Media files 
+.jpg
+.JPG 
+.png
+.PNG 
+.jpeg
+.JPEG 
+.gif
+.GIF

@@ -1,5 +1,5 @@
 import pool from "../config/db.js";
-import bcrypt from "bcrypt";
+import db from '../config/db.js'
 
 
 export const getAllUserService = async () => {
@@ -8,7 +8,7 @@ export const getAllUserService = async () => {
 }
 
 export const getUserByIdUserService = async (id) => {
-    const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+    const result = await pool.query("SELECT id, username, email, profile_picture FROM users WHERE id = $1", [id]);
     if (result.rows.length === 0) {
         throw new Error("User not found");
     }
@@ -29,18 +29,17 @@ export const createUserService = async (name, email, location, skills, github, l
 }
 
 export const updateUserProfile = async ({ userId, name, location, skills, github, linkedIn, profile_image }) => {
-  const result = await pool.query(
-    `UPDATE users
-     SET name = $1,
-         location = $2,
-         skills = $3,
-         github = $4,
-         linkedin = $5,
-         profile_image = COALESCE($6, profile_image)
-     WHERE id = $7
-     RETURNING id, name, location, skills, github, linkedin, profile_image;`,
-    [name, location, skills, github, linkedIn, profile_image, userId]
-  );
+   const result = await db.query(
+      `UPDATE users SET 
+        name = $1, 
+        location = $2, 
+        skills = $3, 
+        linkedIn = $4, 
+        github = $5,
+        profile_image = COALESCE($6, profile_image)
+       WHERE id = $7 RETURNING *`,
+      [name, location, skills, linkedIn, github, profile_image, userId]
+    );
 
   return result.rows[0];
 };
@@ -51,4 +50,14 @@ export const deleteUserService = async (id) => {
         throw new Error("User not found");
     }
     return result.rows[0];
+}
+
+export const profile_pic = async ({profile_image,id}) => {
+    const res = await pool.query("SELECT profile_image, id FROM users WHERE id = $1",
+        [id]
+    );
+    if (res.rows.length === 0) {
+        throw new Error("User not found");
+    }
+    return res.rows[0]
 }
